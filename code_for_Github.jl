@@ -41,8 +41,7 @@ path_to_output= "output.csv"
 
 
 # This is a function that creates one lineup using the No Stacking formulation from the paper
-function	one_lineup_no_stacking(oPlayers, defenses, lineups, num_overlap, num_oPlayers, num_defenses, qbs, rbs, wrs, tes, num_teams, oPlayers_teams, defense_opponents, team_lines, num_lines, P1_info)
-			m = Model(solver=GLPKSolverMIP())
+function one_lineup_no_stacking(oPlayers, defenses, lineups, num_overlap, num_oPlayers, num_defenses, qbs, rbs, wrs, tes, num_teams, oPlayers_teams, defense_opponents, team_lines, num_lines, P1_info)m = Model(solver=GLPKSolverMIP())
 
     # Variable for oPlayers in lineup.
     @defVar(m, oPlayers_lineup[i=1:num_oPlayers], Bin)
@@ -58,7 +57,7 @@ function	one_lineup_no_stacking(oPlayers, defenses, lineups, num_overlap, num_oP
     @addConstraint(m, sum{oPlayers_lineup[i], i=1:num_oPlayers} == 8)
 
 	# One QB constraint
-	@addConstraint(m, sum{qb[i]*oPlayers_lineup[i], i=1:num_oPlayers} = 1)
+	@addConstraint(m, sum{qbs[i]*oPlayers_lineup[i], i=1:num_oPlayers} = 1)
 
     # between 2 and 3 rbs
     @addConstraint(m, sum{rbs[i]*oPlayers_lineup[i], i=1:num_oPlayers} <= 3)
@@ -747,31 +746,31 @@ function create_lineups(num_lineups, num_overlap, path_oPlayers, path_defenses, 
     rbs, and tes with the corresponding correct information
     =#
     for i =1:num_oPlayers
-		if oPlayers[i,:Position] == "QB"
-            qbs=vcat(qbs,fill(1,1))
-			wrs=vcat(wrs,fill(0,1))
-            rbs=vcat(rbs,fill(0,1))
-            tes=vcat(tes,fill(0,1))
+	if oPlayers[i,:Position] == "QB"
+		qbs=vcat(qbs,fill(1,1))
+		wrs=vcat(wrs,fill(0,1))
+		rbs=vcat(rbs,fill(0,1))
+		tes=vcat(tes,fill(0,1))
         elseif oPlayers[i,:Position] == "WR"
-            qbs=vcat(qbs,fill(0,1))
-			wrs=vcat(wrs,fill(1,1))
-            rbs=vcat(rbs,fill(0,1))
-            tes=vcat(tes,fill(0,1))
-        elseif oPlayers[i,:Position] == "RB"
-            qbs=vcat(qbs,fill(0,1))
-			wrs=vcat(wrs,fill(0,1))
-            rbs=vcat(rbs,fill(1,1))
-            tes=vcat(tes,fill(0,1))
+		qbs=vcat(qbs,fill(0,1))
+		wrs=vcat(wrs,fill(1,1))
+		rbs=vcat(rbs,fill(0,1))
+		tes=vcat(tes,fill(0,1))
+	elseif oPlayers[i,:Position] == "RB"
+		qbs=vcat(qbs,fill(0,1))
+		wrs=vcat(wrs,fill(0,1))
+		rbs=vcat(rbs,fill(1,1))
+		tes=vcat(tes,fill(0,1))
         elseif oPlayers[i,:Position] == "TE"
-            qbs=vcat(qbs,fill(0,1))
-			wrs=vcat(wrs,fill(0,1))
-            rbs=vcat(rbs,fill(0,1))
-            tes=vcat(tes,fill(1,1))
+		qbs=vcat(qbs,fill(0,1))
+		wrs=vcat(wrs,fill(0,1))
+		rbs=vcat(rbs,fill(0,1))
+		tes=vcat(tes,fill(1,1))
         else
-            qbs=vcat(qbs,fill(0,1))
-			wrs=vcat(wrs,fill(0,1))
-            rbs=vcat(rbs,fill(0,1))
-            tes=vcat(tes,fill(1,1))
+            	qbs=vcat(qbs,fill(0,1))
+		wrs=vcat(wrs,fill(0,1))
+		rbs=vcat(rbs,fill(0,1))
+		tes=vcat(tes,fill(1,1))
         end
     end
 
@@ -810,7 +809,7 @@ function create_lineups(num_lineups, num_overlap, path_oPlayers, path_defenses, 
 
     # Create defense identifiers so you know who they are playing
     opponents = defenses[:Opponent]
-    goalie_teams = defenses[:Team]
+    defense_teams = defenses[:Team]
     defense_opponents=[]
     for num = 1:size(teams)[1]
         if opponents[1] == teams[num]
