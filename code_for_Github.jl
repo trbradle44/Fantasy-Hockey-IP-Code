@@ -41,22 +41,7 @@ path_to_output= "output.csv"
 
 
 # This is a function that creates one lineup using the No Stacking formulation from the paper
-function	one_lineup_no_stacking	(oPlayers, # Variable for oPlayers in lineup.
-									 defenses,
-									 lineups,
-									 num_overlap,
-									 num_oPlayers,
-									 num_defenses,
-									 qbs,
-									 rbs,
-									 wrs,
-									 tes,
-									 num_teams,
-									 oPlayers_teams, 
-									 defense_opponents, 
-									 team_lines, 
-									 num_lines, 
-									 P1_info)
+function	one_lineup_no_stacking(oPlayers, defenses, lineups, num_overlap, num_oPlayers, num_defenses, qbs, rbs, wrs, tes, num_teams, oPlayers_teams, defense_opponents, team_lines, num_lines, P1_info)
 			m = Model(solver=GLPKSolverMIP())
 
     # Variable for oPlayers in lineup.
